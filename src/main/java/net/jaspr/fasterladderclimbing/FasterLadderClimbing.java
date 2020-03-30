@@ -15,45 +15,89 @@
  */
 package net.jaspr.fasterladderclimbing;
 
+import net.minecraft.entity.MoverType;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.math.Vec3d;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.Mod.EventHandler;
-import net.minecraftforge.fml.common.Mod.Instance;
-import net.minecraftforge.fml.common.SidedProxy;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
+import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.ModLoadingContext;
 
-import net.jaspr.fasterladderclimbing.ref.Ref;
-import net.jaspr.base.proxy.CommonProxy;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-@Mod(modid = Ref.MOD_ID, name = Ref.MOD_NAME, version = Ref.VERSION, guiFactory = Ref.GUI_FACTORY)
+@Mod(FasterLadderClimbing.MOD_ID)
 public class FasterLadderClimbing {
 
-	@Instance(Ref.MOD_ID)
-	public static FasterLadderClimbing instance;
+	public static final String MOD_ID = "fasterladderclimbing";
+	public static final Logger LOGGER = LogManager.getLogger(FasterLadderClimbing.MOD_ID);
 
-	@SidedProxy(serverSide = Ref.PROXY_COMMON, clientSide = Ref.PROXY_CLIENT)
-	public static CommonProxy proxy;
+    public FasterLadderClimbing() {
+		// Load Config
+		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, FasterLadderClimbingConfig.CONFIG_SPEC);
 
-	@EventHandler
-	public void preInit(FMLPreInitializationEvent event) {
-		proxy.preInit(event);
+        // Register ourselves for server and other game events we are interested in
+        MinecraftForge.EVENT_BUS.register(this);
 	}
 
-	@EventHandler
-	public void init(FMLInitializationEvent event) {
-		proxy.init(event);
+	@SubscribeEvent
+	public void onPlayerTick(final TickEvent.PlayerTickEvent event) {
+		if(event.phase == TickEvent.Phase.START) {
+			final PlayerEntity player = event.player;
+
+			if (player.isOnLadder() && !player.isShiftKeyDown()) {
+				EntityClimber climber = new EntityClimber(player);
+	
+				if (FasterLadderClimbingConfig.allowQuickDescension && climber.isFacingDownward() && !climber.isMovingForward() && !climber.isMovingBackward()) {
+					climber.moveDownFarther();
+				} else if (FasterLadderClimbingConfig.allowQuickAscension && climber.isFacingUpward() && climber.isMovingForward()) {
+					climber.moveUpFarther();
+				}
+			}
+		}
 	}
 
-	@EventHandler
-	public void postInit(FMLPostInitializationEvent event) {
-		proxy.postInit(event);
-	}
+	private class EntityClimber {
+		private PlayerEntity player;
 
-	@EventHandler
-	public void serverStarting(FMLServerStartingEvent event) {
-		proxy.serverStarting(event);
-	}
+		public EntityClimber(PlayerEntity player) {
+			this.player = player;
+		}
 
+		private boolean isFacingDownward() {
+			return player.rotationPitch > 0;
+		}
+
+		private boolean isFacingUpward() {
+			return player.rotationPitch < 0;
+		}
+
+		private boolean isMovingForward() {
+			return player.moveForward > 0;
+		}
+
+		private boolean isMovingBackward() {
+			return player.moveForward < 0;
+		}
+
+		private float getElevationChangeUpdate() {
+			return (float)Math.abs(player.rotationPitch / 90.0) * (((float)FasterLadderClimbingConfig.speedModifier) / 10);
+		}
+
+		public void moveUpFarther() {
+			int px = 0;
+			float dx = getElevationChangeUpdate();
+			Vec3d move = new Vec3d(px, dx, px);
+			player.move(MoverType.SELF, move);
+		}
+
+		public void moveDownFarther() {
+			int px = 0;
+			float dx = getElevationChangeUpdate();
+			Vec3d move = new Vec3d(px, (dx * -1), px);
+			player.move(MoverType.SELF, move);
+		}
+	}
 }
