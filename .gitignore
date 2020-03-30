@@ -61,3 +61,6 @@ Temporary Items
 
 # ARL Symlinks
 api/
+
+# vscode settings
+.vscode
