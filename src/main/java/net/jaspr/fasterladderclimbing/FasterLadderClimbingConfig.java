@@ -38,24 +38,24 @@ public class FasterLadderClimbingConfig {
 
 	public static class GeneralConfig {
 
-        public final ForgeConfigSpec.IntValue speedModifier;
-        public final ForgeConfigSpec.BooleanValue allowQuickAscension;
-        public final ForgeConfigSpec.BooleanValue allowQuickDescension;
+		public final ForgeConfigSpec.IntValue speedModifier;
+		public final ForgeConfigSpec.BooleanValue allowQuickAscension;
+		public final ForgeConfigSpec.BooleanValue allowQuickDescension;
 
 		public GeneralConfig (ForgeConfigSpec.Builder builder) {
-            builder.push("General");
+			builder.push("General");
 
 			allowQuickAscension = builder
 				.comment("Allow going UP faster. If [false], then player can only climb up the ladder at normal speed.")
-            	.define("allowQuickAscension", true);
+				.define("allowQuickAscension", true);
 			allowQuickDescension = builder
 				.comment("Allow going DOWN faster. If [false], then player can only climb down the ladder at normal speed.")
-            	.define("allowQuickDescension", true);
+				.define("allowQuickDescension", true);
 			speedModifier = builder
 				.comment("Speed modifier. 0 is Vanilla speed, 10 is lightning speed.")
-            	.defineInRange("speedModifier", 4, 0, 10);
+				.defineInRange("speedModifier", 4, 0, 10);
 
-            builder.pop();
+			builder.pop();
 		}
 	}
 	

@@ -34,12 +34,12 @@ public class FasterLadderClimbing {
 	public static final String MOD_ID = "fasterladderclimbing";
 	public static final Logger LOGGER = LogManager.getLogger(FasterLadderClimbing.MOD_ID);
 
-    public FasterLadderClimbing() {
+	public FasterLadderClimbing() {
 		// Load Config
 		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, FasterLadderClimbingConfig.CONFIG_SPEC);
 
-        // Register ourselves for server and other game events we are interested in
-        MinecraftForge.EVENT_BUS.register(this);
+		// Register ourselves for server and other game events we are interested in
+		MinecraftForge.EVENT_BUS.register(this);
 	}
 
 	@SubscribeEvent
