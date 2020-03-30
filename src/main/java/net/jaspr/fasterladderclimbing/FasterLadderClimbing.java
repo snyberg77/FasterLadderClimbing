@@ -36,7 +36,7 @@ public class FasterLadderClimbing {
 
 	public FasterLadderClimbing() {
 		// Load Config
-		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, FasterLadderClimbingConfig.CONFIG_SPEC);
+		ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, FasterLadderClimbingConfig.CONFIG_SPEC);
 
 		// Register ourselves for server and other game events we are interested in
 		MinecraftForge.EVENT_BUS.register(this);
