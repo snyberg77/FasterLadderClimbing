@@ -17,7 +17,7 @@ package net.jaspr.fasterladderclimbing;
 
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -47,7 +47,7 @@ public class FasterLadderClimbing {
 		if(event.phase == TickEvent.Phase.START) {
 			final PlayerEntity player = event.player;
 
-			if (player.isOnLadder() && !player.isShiftKeyDown()) {
+			if (player.isOnLadder() && !player.isCrouching()) {
 				EntityClimber climber = new EntityClimber(player);
 	
 				if (FasterLadderClimbingConfig.allowQuickDescension && climber.isFacingDownward() && !climber.isMovingForward() && !climber.isMovingBackward()) {
@@ -89,14 +89,14 @@ public class FasterLadderClimbing {
 		public void moveUpFarther() {
 			int px = 0;
 			float dx = getElevationChangeUpdate();
-			Vec3d move = new Vec3d(px, dx, px);
+			Vector3d move = new Vector3d(px, dx, px);
 			player.move(MoverType.SELF, move);
 		}
 
 		public void moveDownFarther() {
 			int px = 0;
 			float dx = getElevationChangeUpdate();
-			Vec3d move = new Vec3d(px, (dx * -1), px);
+			Vector3d move = new Vector3d(px, (dx * -1), px);
 			player.move(MoverType.SELF, move);
 		}
 	}
