@@ -1,11 +1,12 @@
 modLoader="javafml"
-loaderVersion="[28,)"
+loaderVersion="[31,)"
+issueTrackerURL="github.com/arollyson/FasterLadderClimbing/issues"
 
 [[mods]]
 modId="fasterladderclimbing"
 displayName="Faster Ladder Climbing"
 version="${version}"
-authors="JaSpr"
+authors="JaSpr, forkbomb_"
 description='''
 Climb Ladders Faster
 '''
@@ -14,7 +15,7 @@ Climb Ladders Faster
 [[dependencies.fasterladderclimbing]]
     modId="forge"
     mandatory=true
-    versionRange="[30,)"
+    versionRange="[31,)"
     ordering="NONE"
     side="BOTH"
 
