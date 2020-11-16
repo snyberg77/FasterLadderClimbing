@@ -18,7 +18,7 @@ Climb Ladders Faster
     mandatory=true
     versionRange="[35,)"
     ordering="NONE"
-    side="BOTH"
+    side="CLIENT"
 
 #minecraft
 [[dependencies.fasterladderclimbing]]
@@ -26,4 +26,4 @@ Climb Ladders Faster
     mandatory=true
     versionRange="[1.16.4]"
     ordering="NONE"
-    side="BOTH"
+    side="CLIENT"
