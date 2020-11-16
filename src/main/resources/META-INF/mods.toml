@@ -1,6 +1,6 @@
 modLoader="javafml"
 loaderVersion="[35,)"
-issueTrackerURL="github.com/arollyson/FasterLadderClimbing/issues"
+issueTrackerURL="https://github.com/arollyson/FasterLadderClimbing/issues"
 
 [[mods]]
 modId="fasterladderclimbing"
