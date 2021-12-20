@@ -15,19 +15,18 @@
  */
 package net.jaspr.fasterladderclimbing;
 
-import net.minecraft.entity.MoverType;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.entity.MoverType;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.ExtensionPoint;
+import net.minecraftforge.fml.IExtensionPoint.DisplayTest;
 import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.network.FMLNetworkConstants;
+import net.minecraftforge.fmllegacy.network.FMLNetworkConstants;
 
-import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -39,7 +38,7 @@ public class FasterLadderClimbing {
 
 	public FasterLadderClimbing() {
 		//Make sure the mod being absent on the other network side does not cause the client to display the server as incompatible
-		ModLoadingContext.get().registerExtensionPoint(ExtensionPoint.DISPLAYTEST, () -> Pair.of(() -> FMLNetworkConstants.IGNORESERVERONLY, (a, b) -> true));
+		ModLoadingContext.get().registerExtensionPoint(DisplayTest.class, () -> new DisplayTest(() -> FMLNetworkConstants.IGNORESERVERONLY, (a, b) -> true));
 
 		// Load Config
 		ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, FasterLadderClimbingConfig.CONFIG_SPEC);
@@ -51,9 +50,9 @@ public class FasterLadderClimbing {
 	@SubscribeEvent
 	public void onPlayerTick(final TickEvent.PlayerTickEvent event) {
 		if(event.phase == TickEvent.Phase.START) {
-			final PlayerEntity player = event.player;
+			final Player player = event.player;
 
-			if (player.isOnLadder() && !player.isCrouching()) {
+			if (player.onClimbable() && !player.isCrouching()) {
 				EntityClimber climber = new EntityClimber(player);
 	
 				if (FasterLadderClimbingConfig.allowQuickDescension && climber.isFacingDownward() && !climber.isMovingForward() && !climber.isMovingBackward()) {
@@ -66,43 +65,43 @@ public class FasterLadderClimbing {
 	}
 
 	private class EntityClimber {
-		private PlayerEntity player;
+		private Player player;
 
-		public EntityClimber(PlayerEntity player) {
+		public EntityClimber(Player player) {
 			this.player = player;
 		}
 
 		private boolean isFacingDownward() {
-			return player.rotationPitch > 0;
+			return player.getXRot() > 0;
 		}
 
 		private boolean isFacingUpward() {
-			return player.rotationPitch < 0;
+			return player.getXRot() < 0;
 		}
 
 		private boolean isMovingForward() {
-			return player.moveForward > 0;
+			return player.zza > 0;
 		}
 
 		private boolean isMovingBackward() {
-			return player.moveForward < 0;
+			return player.zza < 0;
 		}
 
 		private float getElevationChangeUpdate() {
-			return (float)Math.abs(player.rotationPitch / 90.0) * (((float)FasterLadderClimbingConfig.speedModifier) / 10);
+			return (float)Math.abs(player.getXRot() / 90.0) * (((float)FasterLadderClimbingConfig.speedModifier) / 10);
 		}
 
 		public void moveUpFarther() {
 			int px = 0;
 			float dx = getElevationChangeUpdate();
-			Vector3d move = new Vector3d(px, dx, px);
+			Vec3 move = new Vec3(px, dx, px);
 			player.move(MoverType.SELF, move);
 		}
 
 		public void moveDownFarther() {
 			int px = 0;
 			float dx = getElevationChangeUpdate();
-			Vector3d move = new Vector3d(px, (dx * -1), px);
+			Vec3 move = new Vec3(px, (dx * -1), px);
 			player.move(MoverType.SELF, move);
 		}
 	}

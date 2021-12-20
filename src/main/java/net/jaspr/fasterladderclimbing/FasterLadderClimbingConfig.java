@@ -1,4 +1,3 @@
-
 package net.jaspr.fasterladderclimbing;
 
 import org.apache.commons.lang3.tuple.Pair;
@@ -6,7 +5,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
-import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.event.config.ModConfigEvent;
 
 @EventBusSubscriber(modid = FasterLadderClimbing.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 public class FasterLadderClimbingConfig {
@@ -24,7 +23,7 @@ public class FasterLadderClimbingConfig {
 	public static boolean allowQuickDescension;
 
 	@SubscribeEvent
-	public static void onModConfigEvent(final ModConfig.ModConfigEvent configEvent) {
+	public static void onModConfigEvent(final ModConfigEvent configEvent) {
 		if (configEvent.getConfig().getSpec() == FasterLadderClimbingConfig.CONFIG_SPEC) {
 			bakeConfig();
 		}
@@ -57,6 +56,5 @@ public class FasterLadderClimbingConfig {
 
 			builder.pop();
 		}
-	}
-	
+	}	
 }
