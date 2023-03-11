@@ -1,12 +1,12 @@
 modLoader = "javafml"
-loaderVersion = "[43,)"
+loaderVersion = "[44,)"
 issueTrackerURL = "https://github.com/arollyson/FasterLadderClimbing/issues"
 license = "CC-BY-NC-SA 3.0"
 
 [[mods]]
 modId = "fasterladderclimbing"
 displayName = "Faster Ladder Climbing"
-version = "0.2.7"
+version = "0.2.8"
 authors = "JaSpr, forkbomb_"
 description = '''
 Climb Ladders Faster
@@ -16,7 +16,7 @@ Climb Ladders Faster
 [[dependencies.fasterladderclimbing]]
 modId = "forge"
 mandatory = true
-versionRange = "[43,)"
+versionRange = "[44,)"
 ordering = "NONE"
 side = "CLIENT"
 
@@ -24,6 +24,6 @@ side = "CLIENT"
 [[dependencies.fasterladderclimbing]]
 modId = "minecraft"
 mandatory = true
-versionRange = "[1.19.2]"
+versionRange = "[1.19.3]"
 ordering = "NONE"
 side = "CLIENT"
